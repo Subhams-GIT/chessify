@@ -1,0 +1,29 @@
+{
+  "name": "chess",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "packageManager": "npm@8.5.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Subhams-GIT/chessify.git"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Subhams-GIT/chessify/issues"
+  },
+  "homepage": "https://github.com/Subhams-GIT/chessify#readme",
+  "devDependencies": {
+    "turbo": "^2.5.8"
+  }
+}

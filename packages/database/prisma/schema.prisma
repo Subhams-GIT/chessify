@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String @unique
+  moves          Move[]
+  gamesAsPlayer1 Game[] @relation("Player1Games")
+  gamesAsPlayer2 Game[] @relation("Player2Games")
+}
+
+model Game {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  player1Id String @db.ObjectId
+  player2Id String @db.ObjectId
+  player1   User   @relation("Player1Games", fields: [player1Id], references: [id])
+  player2   User   @relation("Player2Games", fields: [player2Id], references: [id])
+  moves     Move[]
+}
+
+model Move {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  gameId   String @db.ObjectId
+  game     Game   @relation(fields: [gameId], references: [id])
+  playerId String @db.ObjectId
+  player   User   @relation(fields: [playerId], references: [id])
+  moveData String
+}

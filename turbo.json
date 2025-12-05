@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "^db:generate"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["DATABASE_URL"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "dependsOn": ["^db:generate"],
+      "inputs": ["src/**", "package.json", "tsconfig.json"],
+      "persistent": true,
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:deploy": {
+      "cache": false
+    }
+  }
+}
