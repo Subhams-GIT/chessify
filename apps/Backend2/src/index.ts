@@ -8,7 +8,9 @@ import initPassport from "./passport";
 import helmet from 'helmet';
 import prisma from "database";
 const app = express();
-app.use(cors());
+app.use(cors(
+  
+));
 app.use(session({
   secret:process.env.CLIENT_SECRET as string,
   resave:false,
@@ -35,6 +37,6 @@ testDb();
 app.use(passport.authenticate('session'))
 initPassport();
 app.use("/auth", login);
-app.listen(3000,()=>{
+app.listen(4000,()=>{
   console.log('listening at port 3000')
 })

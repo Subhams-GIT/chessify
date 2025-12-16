@@ -43,8 +43,8 @@ router.get(
 );
 
 router.get('/google/callback', passport.authenticate('google', {
-  successRedirect: 'http://localhost:5173/dashboard',
-  failureRedirect: 'http://localhost:5173/login'
+  successRedirect: 'http://localhost:3000/dashboard',
+  failureRedirect: 'http://localhost:3000/login'
 }));
 
 export default router;

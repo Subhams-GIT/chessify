@@ -1,6 +1,8 @@
+'use client'
+
 import { useEffect, useState } from "react"
-const BACKEND_URL=import.meta.env.VITE_APP_BACKEND_URL||'http://localhost:3000'
-export default function Dashboard(){
+const BACKEND_URL='http://localhost:3000'
+export default function Page(){
   const [loading, setloading] = useState(false);
   useEffect(() => {
     setloading(true);
@@ -15,6 +17,6 @@ export default function Dashboard(){
   },[])
   if (loading) return <>loading...</>;
   return <>
-    dash
+    dsnfnn
   </>
 }

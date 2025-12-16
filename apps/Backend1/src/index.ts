@@ -5,9 +5,10 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import http from "http";
 
+
 dotenv.config();
 
-const PORT = 8000;
+const PORT = 8080;
 const server = http.createServer();
 const wss = new WebSocketServer({ noServer: true });
 const gameManager = new GameManager();
@@ -51,12 +52,12 @@ wss.on("connection", (ws, request) => {
   if(!request.user) return new Error('no user !')
   const user = new User(ws,request.user);
   gameManager.addUser(user);
-
+  // user.socket.send(JSON.stringify({type:INIT_GAME}))
   ws.on("close", () => {
     gameManager.removeUser(ws);
   });
 });
 
 server.listen(PORT, () => {
-  console.log(`✅ WebSocket server listening on port ${PORT}`);
+  console.log(`WebSocket server listening on port ${PORT}`);
 });
