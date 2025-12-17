@@ -1,22 +1,21 @@
 'use client'
 
+import Sidebar from "@/Components/Sidebar";
 import { useEffect, useState } from "react"
-const BACKEND_URL='http://localhost:3000'
+import { authClient } from "@/lib/auth-client";
+const BACKEND_URL='http://localhost:4000'
 export default function Page(){
-  const [loading, setloading] = useState(false);
-  useEffect(() => {
-    setloading(true);
-    async function getsession(){
-    const response=await fetch(`${BACKEND_URL}/auth/refresh`)
-    if(response.ok){
-      console.log(response);
-    }
-      setloading(false);
-    }
-    getsession();
-  },[])
-  if (loading) return <>loading...</>;
+  const {data,isPending,error,refetch}=authClient.useSession();
+  useEffect(()=>{
+    console.log(data)
+  },[isPending])
+
+  if (isPending) return <>loading...</>;
   return <>
-    dsnfnn
+  <div className="w-full h-screen max-w-4xl max-h-7xl bg-zinc-100 ">
+      <div className="flex h-full">
+        <Sidebar/>
+      </div>
+    </div>
   </>
 }

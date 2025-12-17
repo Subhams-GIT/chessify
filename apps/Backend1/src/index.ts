@@ -4,7 +4,7 @@ import { User } from "./User";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import http from "http";
-
+import { INIT_GAME } from "./Game";
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ function authenticate(request: http.IncomingMessage) {
   }
 
   const token = authHeader.split(" ")[1];
-  if(!token) return new Error('not authenticated')
+  if (!token) return new Error("not authenticated");
   try {
     const user = jwt.verify(token, process.env.SECRET as string) as string;
     return user;
@@ -40,7 +40,8 @@ server.on("upgrade", (request, socket, head) => {
     socket.destroy();
     return;
   }
-  request.user=JSON.parse(authedUser)
+
+  request.user = JSON.parse(authedUser);
   wss.handleUpgrade(request, socket, head, (ws) => {
     // attach authenticated user to the connection
     (ws as any).user = authedUser;
@@ -49,10 +50,17 @@ server.on("upgrade", (request, socket, head) => {
 });
 
 wss.on("connection", (ws, request) => {
-  if(!request.user) return new Error('no user !')
-  const user = new User(ws,request.user);
-  gameManager.addUser(user);
-  // user.socket.send(JSON.stringify({type:INIT_GAME}))
+  if (!request.user) return new Error("no user !");
+  ws.onmessage = (message) => {
+      const {type,data}=JSON.parse(JSON.stringify(message))
+      switch (type){
+        case INIT_GAME:
+          const user = new User(ws, request.user!);
+          gameManager.addUser(user);
+        break;
+      }
+  };
+
   ws.on("close", () => {
     gameManager.removeUser(ws);
   });
