@@ -3,7 +3,7 @@
  * Client
 **/
 
-import * as runtime from './runtime/client.js';
+import * as runtime from './runtime/binary.js';
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils
@@ -56,7 +56,7 @@ export type Move = $Result.DefaultSelection<Prisma.$MovePayload>
  * ```
  *
  *
- * Read more in our [docs](https://pris.ly/d/client).
+ * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
@@ -77,11 +77,11 @@ export class PrismaClient<
    * ```
    *
    *
-   * Read more in our [docs](https://pris.ly/d/client).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
+  $on<V extends (U | 'beforeExit')>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : V extends 'beforeExit' ? () => $Utils.JsPromise<void> : Prisma.LogEvent) => void): PrismaClient;
 
   /**
    * Connect with the database
@@ -121,9 +121,10 @@ export class PrismaClient<
    * })
    * ```
    * 
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $runCommandRaw(command: Prisma.InputJsonObject): Prisma.PrismaPromise<Prisma.JsonObject>
+
   $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
     extArgs: ExtArgs
   }>>
@@ -227,6 +228,14 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
+   * Metrics
+   */
+  export type Metrics = runtime.Metrics
+  export type Metric<T> = runtime.Metric<T>
+  export type MetricHistogram = runtime.MetricHistogram
+  export type MetricHistogramBucket = runtime.MetricHistogramBucket
+
+  /**
   * Extensions
   */
   export import Extension = $Extensions.UserArgs
@@ -237,12 +246,11 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.1.0
-   * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
+   * Prisma Client JS version: 6.19.1
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
-    engine: string
   }
 
   export const prismaVersion: PrismaVersion
@@ -632,6 +640,9 @@ export namespace Prisma {
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
 
 
+  export type Datasources = {
+    db?: Datasource
+  }
 
   interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
     returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
@@ -1107,6 +1118,14 @@ export namespace Prisma {
   export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
   export interface PrismaClientOptions {
     /**
+     * Overwrites the datasource url from your schema.prisma file
+     */
+    datasources?: Datasources
+    /**
+     * Overwrites the datasource url from your schema.prisma file
+     */
+    datasourceUrl?: string
+    /**
      * @default "colorless"
      */
     errorFormat?: ErrorFormat
@@ -1132,7 +1151,7 @@ export namespace Prisma {
      *  { emit: 'stdout', level: 'error' }
      * 
      * ```
-     * Read more in our [docs](https://pris.ly/d/logging).
+     * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
     log?: (LogLevel | LogDefinition)[]
     /**
@@ -1144,10 +1163,6 @@ export namespace Prisma {
       maxWait?: number
       timeout?: number
     }
-    /**
-     * Prisma Accelerate URL allowing the client to connect through Accelerate instead of a direct database.
-     */
-    accelerateUrl?: string
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -2480,6 +2495,7 @@ export namespace Prisma {
     userId: string | null
     token: string | null
     expiresAt: Date | null
+    createdAt: Date | null
   }
 
   export type SessionMaxAggregateOutputType = {
@@ -2487,6 +2503,7 @@ export namespace Prisma {
     userId: string | null
     token: string | null
     expiresAt: Date | null
+    createdAt: Date | null
   }
 
   export type SessionCountAggregateOutputType = {
@@ -2494,6 +2511,7 @@ export namespace Prisma {
     userId: number
     token: number
     expiresAt: number
+    createdAt: number
     _all: number
   }
 
@@ -2503,6 +2521,7 @@ export namespace Prisma {
     userId?: true
     token?: true
     expiresAt?: true
+    createdAt?: true
   }
 
   export type SessionMaxAggregateInputType = {
@@ -2510,6 +2529,7 @@ export namespace Prisma {
     userId?: true
     token?: true
     expiresAt?: true
+    createdAt?: true
   }
 
   export type SessionCountAggregateInputType = {
@@ -2517,6 +2537,7 @@ export namespace Prisma {
     userId?: true
     token?: true
     expiresAt?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -2597,6 +2618,7 @@ export namespace Prisma {
     userId: string
     token: string
     expiresAt: Date
+    createdAt: Date
     _count: SessionCountAggregateOutputType | null
     _min: SessionMinAggregateOutputType | null
     _max: SessionMaxAggregateOutputType | null
@@ -2621,6 +2643,7 @@ export namespace Prisma {
     userId?: boolean
     token?: boolean
     expiresAt?: boolean
+    createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["session"]>
 
@@ -2631,9 +2654,10 @@ export namespace Prisma {
     userId?: boolean
     token?: boolean
     expiresAt?: boolean
+    createdAt?: boolean
   }
 
-  export type SessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "expiresAt", ExtArgs["result"]["session"]>
+  export type SessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "expiresAt" | "createdAt", ExtArgs["result"]["session"]>
   export type SessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2648,6 +2672,7 @@ export namespace Prisma {
       userId: string
       token: string
       expiresAt: Date
+      createdAt: Date
     }, ExtArgs["result"]["session"]>
     composites: {}
   }
@@ -3045,6 +3070,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Session", 'String'>
     readonly token: FieldRef<"Session", 'String'>
     readonly expiresAt: FieldRef<"Session", 'DateTime'>
+    readonly createdAt: FieldRef<"Session", 'DateTime'>
   }
     
 
@@ -7382,7 +7408,8 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     token: 'token',
-    expiresAt: 'expiresAt'
+    expiresAt: 'expiresAt',
+    createdAt: 'createdAt'
   };
 
   export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -7586,6 +7613,7 @@ export namespace Prisma {
     userId?: StringFilter<"Session"> | string
     token?: StringFilter<"Session"> | string
     expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -7594,6 +7622,7 @@ export namespace Prisma {
     userId?: SortOrder
     token?: SortOrder
     expiresAt?: SortOrder
+    createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -7605,6 +7634,7 @@ export namespace Prisma {
     NOT?: SessionWhereInput | SessionWhereInput[]
     userId?: StringFilter<"Session"> | string
     expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "token">
 
@@ -7613,6 +7643,7 @@ export namespace Prisma {
     userId?: SortOrder
     token?: SortOrder
     expiresAt?: SortOrder
+    createdAt?: SortOrder
     _count?: SessionCountOrderByAggregateInput
     _max?: SessionMaxOrderByAggregateInput
     _min?: SessionMinOrderByAggregateInput
@@ -7626,6 +7657,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Session"> | string
     token?: StringWithAggregatesFilter<"Session"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
   }
 
   export type AccountWhereInput = {
@@ -7928,6 +7960,7 @@ export namespace Prisma {
     id?: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
     user: UserCreateNestedOneWithoutSessionsInput
   }
 
@@ -7936,11 +7969,13 @@ export namespace Prisma {
     userId: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
   }
 
   export type SessionUpdateInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSessionsNestedInput
   }
 
@@ -7948,6 +7983,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionCreateManyInput = {
@@ -7955,17 +7991,20 @@ export namespace Prisma {
     userId: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
   }
 
   export type SessionUpdateManyMutationInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateInput = {
@@ -8349,6 +8388,7 @@ export namespace Prisma {
     userId?: SortOrder
     token?: SortOrder
     expiresAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type SessionMaxOrderByAggregateInput = {
@@ -8356,6 +8396,7 @@ export namespace Prisma {
     userId?: SortOrder
     token?: SortOrder
     expiresAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type SessionMinOrderByAggregateInput = {
@@ -8363,6 +8404,7 @@ export namespace Prisma {
     userId?: SortOrder
     token?: SortOrder
     expiresAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -9146,12 +9188,14 @@ export namespace Prisma {
     id?: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
   }
 
   export type SessionUncheckedCreateWithoutUserInput = {
     id?: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
   }
 
   export type SessionCreateOrConnectWithoutUserInput = {
@@ -9284,6 +9328,7 @@ export namespace Prisma {
     userId?: StringFilter<"Session"> | string
     token?: StringFilter<"Session"> | string
     expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -9701,6 +9746,7 @@ export namespace Prisma {
     id?: string
     token: string
     expiresAt: Date | string
+    createdAt: Date | string
   }
 
   export type MoveUpdateWithoutPlayerInput = {
@@ -9776,16 +9822,19 @@ export namespace Prisma {
   export type SessionUpdateWithoutUserInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateWithoutUserInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SessionUncheckedUpdateManyWithoutUserInput = {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MoveCreateManyGameInput = {

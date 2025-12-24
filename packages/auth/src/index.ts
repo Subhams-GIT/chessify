@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
-import {prisma} from "database"
+import prisma from "database"
 
 
 const auth = betterAuth({

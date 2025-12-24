@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-  "start": "next start",
+    "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@repo/auth":"*",
+    "@repo/auth": "*",
+    "@repo/database": "*",
     "better-auth": "^1.4.7",
     "chess.js": "^1.4.0",
     "framer-motion": "^12.23.26",
@@ -20,7 +21,7 @@
     "react-dom": "19.2.1"
   },
   "devDependencies": {
-    "@repo/auth":"*",
+    "@repo/auth": "*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

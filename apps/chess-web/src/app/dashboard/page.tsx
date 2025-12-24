@@ -1,9 +1,9 @@
 'use client'
 
 import Sidebar from "@/Components/Sidebar";
-import { useEffect, useState } from "react"
-import { authClient } from "@/lib/auth-client";
-const BACKEND_URL='http://localhost:4000'
+import { useEffect} from "react"
+import { authClient } from "@/lib/auth";
+
 export default function Page(){
   const {data,isPending,error,refetch}=authClient.useSession();
   useEffect(()=>{

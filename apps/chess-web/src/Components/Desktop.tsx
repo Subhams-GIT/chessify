@@ -1,24 +1,25 @@
 import { Chess } from "chess.js";
 import { useEffect, useRef, useState } from "react";
 import { Chessboard, ChessboardOptions } from "react-chessboard";
-import { useParams } from "react-router";
+import { useSearchParams } from "next/navigation";
 
 export function DesktopLayout() {
     const chessgameRef=useRef(new Chess());
-    const chessGame=chessgameRef.current;
     const options:ChessboardOptions={
       boardStyle:{
         height:500,
         width:500,
       }
     }
-    const [chessPosition,setchessPosition]=useState(chessGame.fen());
+    const [chessPosition,setchessPosition]=useState<string|null>();
     console.log(chessPosition)
-    const {id} =useParams()
-    
+    const params =useSearchParams()
+    const id=params.get('id')
     useEffect(()=>{
+    const chessGame=chessgameRef.current;
       if(id?.trim()=="") return;
-    },[])
+      setchessPosition(chessGame.fen())
+    },[id,chessgameRef])
     
   return (
     <div className="flex h-screen gap-4 p-4">

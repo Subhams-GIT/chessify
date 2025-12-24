@@ -4,13 +4,12 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import prisma from "database";
+// import {prisma} from "database";
 import { SuccessContext } from "better-auth/react";
-export default function Login() {
+export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
@@ -24,9 +23,9 @@ export default function Login() {
         },
         {
           onRequest: () => setLoading(true),
-          onSuccess: (data:SuccessContext) => {
-              console.log(data)
-            router.push("/dashboard")
+          onSuccess: (data: SuccessContext) => {
+            console.log(data);
+            router.push("/dashboard");
           },
           onError: (ctx) => setError(ctx.error.message || "Sign in failed"),
         }
@@ -86,12 +85,9 @@ export default function Login() {
           </div>
         </button>
 
-        
-        
-
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
+        {error && (
+          <div className="text-red-500 text-sm text-center">{error}</div>
+        )}
       </div>
     </div>
   );

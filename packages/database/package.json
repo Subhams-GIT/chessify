@@ -1,26 +1,32 @@
 {
-  "name": "database",
+  "name": "@repo/database",
   "version": "1.0.0",
   "description": "",
-  "type":"module",
+  "private": "true",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx prisma generate --schema ./prisma/schema.prisma",
-    "build": "npm run db:generate &&  tsc -p tsconfig.json",
-    "db:generate": "npx prisma generate --schema=./prisma/schema.prisma",
+    "db:generate": "prisma generate --schema=./prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
     "db:deploy": "prisma migrate deploy --schema=./prisma/schema.prisma"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "node": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.18.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "6.19",
     "dotenv": "^17.2.3",
-    "prisma": "^7.1.0",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.4",
+    "prisma": "6.19"
   }
 }
