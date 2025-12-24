@@ -3,18 +3,24 @@
 import Sidebar from "@/Components/Sidebar";
 import { useEffect} from "react"
 import { authClient } from "@/lib/auth";
+import TopBar from "@/Components/TopBar";
 
 export default function Page(){
-  const {data,isPending,error,refetch}=authClient.useSession();
+  const data=authClient.getSession().then((data)=>{
+    console.log(data)
+  });
   useEffect(()=>{
     console.log(data)
-  },[isPending])
+  },[])
 
-  if (isPending) return <>loading...</>;
+  // if (isPending) return <>loading...</>;
   return <>
-  <div className="w-full h-screen max-w-4xl max-h-7xl bg-zinc-100 ">
-      <div className="flex h-full">
+  <div className="w-full h-screen grid grid-cols-2 grid-rows-1 max-w-4xl max-h-7xl bg-zinc-100 ">
+      <div className="flex w-fit h-full items-center">
         <Sidebar/>
+      </div>
+      <div>
+        <TopBar/>
       </div>
     </div>
   </>

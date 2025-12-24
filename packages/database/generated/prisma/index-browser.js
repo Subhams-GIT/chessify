@@ -127,7 +127,8 @@ exports.Prisma.SessionScalarFieldEnum = {
   userId: 'userId',
   token: 'token',
   expiresAt: 'expiresAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -145,7 +146,9 @@ exports.Prisma.VerificationScalarFieldEnum = {
   id: 'id',
   identifier: 'identifier',
   value: 'value',
-  expiresAt: 'expiresAt'
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.GameScalarFieldEnum = {

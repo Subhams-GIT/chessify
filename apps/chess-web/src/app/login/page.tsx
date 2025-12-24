@@ -4,8 +4,9 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// import {prisma} from "database";
+// import prisma from "@repo/database";
 import { SuccessContext } from "better-auth/react";
+import signup from "@/lib/signup";
 export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,8 +24,9 @@ export default function Page() {
         },
         {
           onRequest: () => setLoading(true),
-          onSuccess: (data: SuccessContext) => {
+          onSuccess:async(data: SuccessContext) => {
             console.log(data);
+            // signup()
             router.push("/dashboard");
           },
           onError: (ctx) => setError(ctx.error.message || "Sign in failed"),

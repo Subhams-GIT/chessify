@@ -1,2 +1,9 @@
 @import "tailwindcss";
 
+
+.inter-font {
+  font-family: "Jersey 10", sans-serif;
+  font-optical-sizing: auto;
+  font-weight:200;
+  font-style: normal;
+}

@@ -14,7 +14,7 @@ model User {
   email          String?   @unique
   name           String?
   image          String?
-  emailVerified  DateTime?
+  emailVerified  Boolean
   moves          Move[]
   gamesAsPlayer1 Game[]    @relation("Player1Games")
   gamesAsPlayer2 Game[]    @relation("Player2Games")
@@ -28,6 +28,7 @@ model Session {
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime
+  updatedAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -51,6 +52,8 @@ model Verification {
   identifier String
   value      String
   expiresAt  DateTime
+  createdAt  DateTime
+  updatedAt  DateTime
 
   @@index([identifier])
 }
