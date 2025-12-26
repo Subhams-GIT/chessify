@@ -7943,7 +7943,7 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -7956,7 +7956,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -7993,7 +7993,7 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -8015,7 +8015,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateInput = {
-    id?: string
+    id: string
     token: string
     expiresAt: Date | string
     createdAt: Date | string
@@ -8024,7 +8024,7 @@ export namespace Prisma {
   }
 
   export type SessionUncheckedCreateInput = {
-    id?: string
+    id: string
     userId: string
     token: string
     expiresAt: Date | string
@@ -8049,7 +8049,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateManyInput = {
-    id?: string
+    id: string
     userId: string
     token: string
     expiresAt: Date | string
@@ -8073,7 +8073,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateInput = {
-    id?: string
+    id: string
     provider: string
     providerAccountId: string
     accessToken?: string | null
@@ -8084,7 +8084,7 @@ export namespace Prisma {
   }
 
   export type AccountUncheckedCreateInput = {
-    id?: string
+    id: string
     userId: string
     provider: string
     providerAccountId: string
@@ -8115,7 +8115,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateManyInput = {
-    id?: string
+    id: string
     userId: string
     provider: string
     providerAccountId: string
@@ -8145,7 +8145,7 @@ export namespace Prisma {
   }
 
   export type VerificationCreateInput = {
-    id?: string
+    id: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -8154,7 +8154,7 @@ export namespace Prisma {
   }
 
   export type VerificationUncheckedCreateInput = {
-    id?: string
+    id: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -8179,7 +8179,7 @@ export namespace Prisma {
   }
 
   export type VerificationCreateManyInput = {
-    id?: string
+    id: string
     identifier: string
     value: string
     expiresAt: Date | string
@@ -8204,14 +8204,14 @@ export namespace Prisma {
   }
 
   export type GameCreateInput = {
-    id?: string
+    id: string
     player1: UserCreateNestedOneWithoutGamesAsPlayer1Input
     player2: UserCreateNestedOneWithoutGamesAsPlayer2Input
     moves?: MoveCreateNestedManyWithoutGameInput
   }
 
   export type GameUncheckedCreateInput = {
-    id?: string
+    id: string
     player1Id: string
     player2Id: string
     moves?: MoveUncheckedCreateNestedManyWithoutGameInput
@@ -8230,7 +8230,7 @@ export namespace Prisma {
   }
 
   export type GameCreateManyInput = {
-    id?: string
+    id: string
     player1Id: string
     player2Id: string
   }
@@ -8245,14 +8245,14 @@ export namespace Prisma {
   }
 
   export type MoveCreateInput = {
-    id?: string
+    id: string
     moveData: string
     game: GameCreateNestedOneWithoutMovesInput
     player: UserCreateNestedOneWithoutMovesInput
   }
 
   export type MoveUncheckedCreateInput = {
-    id?: string
+    id: string
     gameId: string
     playerId: string
     moveData: string
@@ -8271,7 +8271,7 @@ export namespace Prisma {
   }
 
   export type MoveCreateManyInput = {
-    id?: string
+    id: string
     gameId: string
     playerId: string
     moveData: string
@@ -9152,13 +9152,13 @@ export namespace Prisma {
   }
 
   export type MoveCreateWithoutPlayerInput = {
-    id?: string
+    id: string
     moveData: string
     game: GameCreateNestedOneWithoutMovesInput
   }
 
   export type MoveUncheckedCreateWithoutPlayerInput = {
-    id?: string
+    id: string
     gameId: string
     moveData: string
   }
@@ -9173,13 +9173,13 @@ export namespace Prisma {
   }
 
   export type GameCreateWithoutPlayer1Input = {
-    id?: string
+    id: string
     player2: UserCreateNestedOneWithoutGamesAsPlayer2Input
     moves?: MoveCreateNestedManyWithoutGameInput
   }
 
   export type GameUncheckedCreateWithoutPlayer1Input = {
-    id?: string
+    id: string
     player2Id: string
     moves?: MoveUncheckedCreateNestedManyWithoutGameInput
   }
@@ -9194,13 +9194,13 @@ export namespace Prisma {
   }
 
   export type GameCreateWithoutPlayer2Input = {
-    id?: string
+    id: string
     player1: UserCreateNestedOneWithoutGamesAsPlayer1Input
     moves?: MoveCreateNestedManyWithoutGameInput
   }
 
   export type GameUncheckedCreateWithoutPlayer2Input = {
-    id?: string
+    id: string
     player1Id: string
     moves?: MoveUncheckedCreateNestedManyWithoutGameInput
   }
@@ -9215,7 +9215,7 @@ export namespace Prisma {
   }
 
   export type AccountCreateWithoutUserInput = {
-    id?: string
+    id: string
     provider: string
     providerAccountId: string
     accessToken?: string | null
@@ -9225,7 +9225,7 @@ export namespace Prisma {
   }
 
   export type AccountUncheckedCreateWithoutUserInput = {
-    id?: string
+    id: string
     provider: string
     providerAccountId: string
     accessToken?: string | null
@@ -9244,7 +9244,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateWithoutUserInput = {
-    id?: string
+    id: string
     token: string
     expiresAt: Date | string
     createdAt: Date | string
@@ -9252,7 +9252,7 @@ export namespace Prisma {
   }
 
   export type SessionUncheckedCreateWithoutUserInput = {
-    id?: string
+    id: string
     token: string
     expiresAt: Date | string
     createdAt: Date | string
@@ -9394,7 +9394,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutSessionsInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9406,7 +9406,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9456,7 +9456,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutAccountsInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9468,7 +9468,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9518,7 +9518,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutGamesAsPlayer1Input = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9530,7 +9530,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutGamesAsPlayer1Input = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9547,7 +9547,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutGamesAsPlayer2Input = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9559,7 +9559,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutGamesAsPlayer2Input = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9576,13 +9576,13 @@ export namespace Prisma {
   }
 
   export type MoveCreateWithoutGameInput = {
-    id?: string
+    id: string
     moveData: string
     player: UserCreateNestedOneWithoutMovesInput
   }
 
   export type MoveUncheckedCreateWithoutGameInput = {
-    id?: string
+    id: string
     playerId: string
     moveData: string
   }
@@ -9679,13 +9679,13 @@ export namespace Prisma {
   }
 
   export type GameCreateWithoutMovesInput = {
-    id?: string
+    id: string
     player1: UserCreateNestedOneWithoutGamesAsPlayer1Input
     player2: UserCreateNestedOneWithoutGamesAsPlayer2Input
   }
 
   export type GameUncheckedCreateWithoutMovesInput = {
-    id?: string
+    id: string
     player1Id: string
     player2Id: string
   }
@@ -9696,7 +9696,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutMovesInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9708,7 +9708,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutMovesInput = {
-    id?: string
+    id: string
     email?: string | null
     name?: string | null
     image?: string | null
@@ -9779,23 +9779,23 @@ export namespace Prisma {
   }
 
   export type MoveCreateManyPlayerInput = {
-    id?: string
+    id: string
     gameId: string
     moveData: string
   }
 
   export type GameCreateManyPlayer1Input = {
-    id?: string
+    id: string
     player2Id: string
   }
 
   export type GameCreateManyPlayer2Input = {
-    id?: string
+    id: string
     player1Id: string
   }
 
   export type AccountCreateManyUserInput = {
-    id?: string
+    id: string
     provider: string
     providerAccountId: string
     accessToken?: string | null
@@ -9805,7 +9805,7 @@ export namespace Prisma {
   }
 
   export type SessionCreateManyUserInput = {
-    id?: string
+    id: string
     token: string
     expiresAt: Date | string
     createdAt: Date | string
@@ -9904,7 +9904,7 @@ export namespace Prisma {
   }
 
   export type MoveCreateManyGameInput = {
-    id?: string
+    id: string
     playerId: string
     moveData: string
   }

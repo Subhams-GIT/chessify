@@ -29,9 +29,9 @@ const Sidebar = React.memo(function SideBar() {
   console.log(currentTab.current);
   console.log(selectedTab);
   const tabs = [
-    { id: "History", 
-      label: "History", 
-      icon: <History />, 
+    { id: "History",
+      label: "History",
+      icon: <History />,
       route: "history"
     },
     {
@@ -73,8 +73,9 @@ const Sidebar = React.memo(function SideBar() {
       <div className="flex flex-col gap-5">
         <Button styles="bg-[#09C388] shadow-xl text-white rounded-xl flex justify-center items-center  py-5 px-2 flex-wrap"
             callback={createGame}
-            children={`${<PlusCircle/>} Create Game`}
-        ></Button>
+        >
+          <PlusCircle/> Create Game
+        </Button>
         {tabs.map((tab) => {
           return (
             <button

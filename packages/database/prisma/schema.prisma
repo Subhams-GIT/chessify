@@ -10,7 +10,7 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String    @id  @default(cuid()) @map("_id")
   email          String?   @unique
   name           String?
   image          String?
@@ -23,7 +23,7 @@ model User {
 }
 
 model Session {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id  @map("_id") @default(cuid())
   userId    String   @db.ObjectId
   token     String   @unique
   expiresAt DateTime
@@ -33,7 +33,7 @@ model Session {
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  id                String  @id @map("_id") @default(cuid())
   userId            String  @db.ObjectId
   provider          String
   providerAccountId String
@@ -48,7 +48,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id  @map("_id") @default(cuid())
   identifier String
   value      String
   expiresAt  DateTime
@@ -58,7 +58,7 @@ model Verification {
 }
 
 model Game {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String @id @map("_id") @default(cuid())
   player1Id String @db.ObjectId
   player2Id String @db.ObjectId
   player1   User   @relation("Player1Games", fields: [player1Id], references: [id])
@@ -67,7 +67,7 @@ model Game {
 }
 
 model Move {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id  @map("_id") @default(cuid())
   gameId   String @db.ObjectId
   game     Game   @relation(fields: [gameId], references: [id])
   playerId String @db.ObjectId

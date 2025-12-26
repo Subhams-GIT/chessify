@@ -1,27 +1,30 @@
-'use client'
-
+"use client";
 import Sidebar from "@/Components/Sidebar";
-import { useEffect} from "react"
+import { useEffect } from "react";
 import { authClient } from "@/lib/auth";
 import TopBar from "@/Components/TopBar";
+import { useUser } from "@/Store/store";
+export default function Page() {
+  const { setuser } = useUser();
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await authClient.getSession();
+      if (data?.user) setuser(data.user);
+      console.log(data);
+    };
+    getSession();
+  }, []);
 
-export default function Page(){
-  const data=authClient.getSession().then((data)=>{
-    console.log(data)
-  });
-  useEffect(()=>{
-    console.log(data)
-  },[])
-
-  // if (isPending) return <>loading...</>;
-  return <>
-  <div className="w-full h-screen grid grid-cols-2 grid-rows-1 max-w-4xl max-h-7xl bg-zinc-100 ">
-      <div className="flex w-fit h-full items-center">
-        <Sidebar/>
+  return (
+    <>
+      <div className="w-screen h-screen max-w-full max-h-full bg-zinc-100 grid grid-cols-[200px_3fr]">
+        <div className="h-full flex flex-col">
+          <Sidebar />
+        </div>
+        <div className="h-full w-full flex flex-col px-3">
+          <TopBar />
+        </div>
       </div>
-      <div>
-        <TopBar/>
-      </div>
-    </div>
-  </>
+    </>
+  );
 }

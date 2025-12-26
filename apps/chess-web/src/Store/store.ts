@@ -2,10 +2,12 @@ import { create } from "zustand";
 
 export type user = {
   id: string;
+  createdAt: Date;
+  updatedAt: Date;
   email: string;
   emailVerified: boolean;
   name: string;
-  image: string;
+  image?: string | null | undefined;
 };
 
 interface userStore {
@@ -15,7 +17,10 @@ interface userStore {
 }
 
 export const useUser = create<userStore>((set) => ({
-  user: { id: "", emailVerified: false, email: "", name: "", image: "" },
-  setuser: (u) => set({ user: u }),
+  user: { id: "", emailVerified: false, email: "", name: "", image: "" ,createdAt:new Date(),updatedAt:new Date()},
+  setuser: (u) => set((state: userStore)=>{
+    if(state.user.id===u.id) return {};
+    return {user: u};
+  }),
   isMobileOpen: false,
 }));
