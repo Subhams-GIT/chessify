@@ -7,3 +7,20 @@
   font-weight:200;
   font-style: normal;
 }
+
+@keyframes rollout {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 400px; /* large enough to fit content */
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-rollout {
+    animation: rollout 0.4s ease-out forwards;
+  }
+}

@@ -88,39 +88,11 @@ Prisma.NullTypes = {
  */
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  username: 'username',
   email: 'email',
   name: 'name',
   image: 'image',
   emailVerified: 'emailVerified'
-};
-
-exports.Prisma.SessionScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  token: 'token',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AccountScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  accessToken: 'accessToken',
-  refreshToken: 'refreshToken',
-  expiresAt: 'expiresAt',
-  idToken: 'idToken'
-};
-
-exports.Prisma.VerificationScalarFieldEnum = {
-  id: 'id',
-  identifier: 'identifier',
-  value: 'value',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.GameScalarFieldEnum = {
@@ -149,9 +121,6 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Session: 'Session',
-  Account: 'Account',
-  Verification: 'Verification',
   Game: 'Game',
   Move: 'Move'
 };
@@ -194,6 +163,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mongodb",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -202,13 +172,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider   = \"prisma-client-js\"\n  engineType = \"binary\"\n  output     = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id             String    @id @map(\"_id\") @db.ObjectId\n  email          String?   @unique\n  name           String?\n  image          String?\n  emailVerified  Boolean\n  moves          Move[]\n  gamesAsPlayer1 Game[]    @relation(\"Player1Games\")\n  gamesAsPlayer2 Game[]    @relation(\"Player2Games\")\n  accounts       Account[]\n  sessions       Session[]\n}\n\nmodel Session {\n  id        String   @id @map(\"_id\") @db.ObjectId\n  userId    String   @db.ObjectId\n  token     String   @unique\n  expiresAt DateTime\n  createdAt DateTime\n  updatedAt DateTime\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel Account {\n  id                String  @id @map(\"_id\") @db.ObjectId\n  userId            String  @db.ObjectId\n  provider          String\n  providerAccountId String\n  accessToken       String?\n  refreshToken      String?\n  expiresAt         Int?\n  idToken           String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Verification {\n  id         String   @id @map(\"_id\") @db.ObjectId\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime\n  updatedAt  DateTime\n\n  @@index([identifier])\n}\n\nmodel Game {\n  id        String @id @map(\"_id\") @db.ObjectId\n  player1Id String @db.ObjectId\n  player2Id String @db.ObjectId\n  player1   User   @relation(\"Player1Games\", fields: [player1Id], references: [id])\n  player2   User   @relation(\"Player2Games\", fields: [player2Id], references: [id])\n  moves     Move[]\n}\n\nmodel Move {\n  id       String @id @map(\"_id\") @db.ObjectId\n  gameId   String @db.ObjectId\n  game     Game   @relation(fields: [gameId], references: [id])\n  playerId String @db.ObjectId\n  player   User   @relation(fields: [playerId], references: [id])\n  moveData String\n}\n",
-  "inlineSchemaHash": "527e7ecb1ad134a5344dcc2b07e7cc1db57a9a87059b7ce52a44f23a93e495ec",
+  "inlineSchema": "generator client {\n  provider   = \"prisma-client-js\"\n  engineType = \"binary\"\n  output     = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id             String  @id @default(cuid()) @map(\"_id\")\n  username       String  @unique\n  email          String? @unique\n  name           String?\n  image          String?\n  emailVerified  Boolean\n  moves          Move[]\n  gamesAsPlayer1 Game[]  @relation(\"Player1Games\")\n  gamesAsPlayer2 Game[]  @relation(\"Player2Games\")\n}\n\nmodel Game {\n  id        String @id @default(cuid()) @map(\"_id\")\n  player1Id String @db.ObjectId\n  player2Id String @db.ObjectId\n  player1   User   @relation(\"Player1Games\", fields: [player1Id], references: [id])\n  player2   User   @relation(\"Player2Games\", fields: [player2Id], references: [id])\n  moves     Move[]\n}\n\nmodel Move {\n  id       String @id @default(cuid()) @map(\"_id\")\n  gameId   String @db.ObjectId\n  game     Game   @relation(fields: [gameId], references: [id])\n  playerId String @db.ObjectId\n  player   User   @relation(fields: [playerId], references: [id])\n  moveData String\n}\n",
+  "inlineSchemaHash": "2d2b7899133680ab2ea47e2928a75bd2a5e81abc024bbf9aa67ead9074475134",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"MoveToUser\"},{\"name\":\"gamesAsPlayer1\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player1Games\"},{\"name\":\"gamesAsPlayer2\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player2Games\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"provider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerAccountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":null},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Game\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"player1Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player2Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player1\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player1Games\"},{\"name\":\"player2\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player2Games\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"GameToMove\"}],\"dbName\":null},\"Move\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"gameId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"game\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"GameToMove\"},{\"name\":\"playerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MoveToUser\"},{\"name\":\"moveData\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"MoveToUser\"},{\"name\":\"gamesAsPlayer1\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player1Games\"},{\"name\":\"gamesAsPlayer2\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player2Games\"}],\"dbName\":null},\"Game\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"player1Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player2Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player1\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player1Games\"},{\"name\":\"player2\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player2Games\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"GameToMove\"}],\"dbName\":null},\"Move\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"gameId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"game\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"GameToMove\"},{\"name\":\"playerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MoveToUser\"},{\"name\":\"moveData\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

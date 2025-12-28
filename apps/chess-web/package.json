@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.2.4",
+    "@dicebear/core": "^9.2.4",
     "@repo/auth": "*",
     "@repo/database": "*",
     "better-auth": "^1.4.7",

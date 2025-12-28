@@ -10,55 +10,19 @@ datasource db {
 }
 
 model User {
-  id             String    @id  @default(cuid()) @map("_id")
-  email          String?   @unique
+  id             String  @id @default(cuid()) @map("_id")
+  username       String  @unique
+  email          String? @unique
   name           String?
   image          String?
   emailVerified  Boolean
   moves          Move[]
-  gamesAsPlayer1 Game[]    @relation("Player1Games")
-  gamesAsPlayer2 Game[]    @relation("Player2Games")
-  accounts       Account[]
-  sessions       Session[]
-}
-
-model Session {
-  id        String   @id  @map("_id") @default(cuid())
-  userId    String   @db.ObjectId
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime
-  updatedAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Account {
-  id                String  @id @map("_id") @default(cuid())
-  userId            String  @db.ObjectId
-  provider          String
-  providerAccountId String
-  accessToken       String?
-  refreshToken      String?
-  expiresAt         Int?
-  idToken           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Verification {
-  id         String   @id  @map("_id") @default(cuid())
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime
-  updatedAt DateTime
-  @@index([identifier])
+  gamesAsPlayer1 Game[]  @relation("Player1Games")
+  gamesAsPlayer2 Game[]  @relation("Player2Games")
 }
 
 model Game {
-  id        String @id @map("_id") @default(cuid())
+  id        String @id @default(cuid()) @map("_id")
   player1Id String @db.ObjectId
   player2Id String @db.ObjectId
   player1   User   @relation("Player1Games", fields: [player1Id], references: [id])
@@ -67,7 +31,7 @@ model Game {
 }
 
 model Move {
-  id       String @id  @map("_id") @default(cuid())
+  id       String @id @default(cuid()) @map("_id")
   gameId   String @db.ObjectId
   game     Game   @relation(fields: [gameId], references: [id])
   playerId String @db.ObjectId

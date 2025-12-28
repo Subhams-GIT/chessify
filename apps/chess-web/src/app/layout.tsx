@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import auth from "@/lib/auth-client";
+import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +24,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data=await auth.api.getSession({
+    headers:await headers()
+  });
   
+  console.log(data)
   return (
     <html lang="en" precedence="default">
       <head>
