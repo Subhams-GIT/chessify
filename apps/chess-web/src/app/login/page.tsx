@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 // import prisma from "@repo/database";
 import { SuccessContext } from "better-auth/react";
 import signup from "@/lib/signup";
+import prisma from "@repo/database";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -18,16 +19,15 @@ export default function Page() {
     setError("");
 
     try {
-      const { error } = await authClient.signIn.social(
+      const { error , data } = await authClient.signIn.social(
         {
           provider: "google",
           callbackURL: "/dashboard",
         },
         {
-          onRequest: () => setLoading(true),
-          onSuccess:async(data: SuccessContext) => {
-            console.log(data);
-            router.push("/dashboard");
+          onRequest: () => {setLoading(true)
+          },
+          onSuccess:async(data: SuccessContext) => {   
           },
           onError: (ctx) => setError(ctx.error.message || "Sign in failed"),
         }

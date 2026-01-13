@@ -6,12 +6,19 @@ export class GameManager {
   private games: Game[];
   private pendingPlayerIds: string[];
   private users: User[];
+  static manager:GameManager;
   constructor() {
     this.games = [];
     this.pendingPlayerIds = [];
     this.users = [];
   }
 
+  getInstance(){
+    if(GameManager.manager){
+      return GameManager.manager
+    }
+    else return new GameManager;
+  } 
   addUser(user: User) {
     this.users.push(user);
     this.handleMessage(user);

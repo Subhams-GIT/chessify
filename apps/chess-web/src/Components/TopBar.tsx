@@ -19,7 +19,7 @@ const TopBar = () => {
       <section className="bg-white rounded-3xl mx-3 px-2 py-1 shadow-2xl relative">
         <div className="flex rounded-2xl items-center gap-x-2">
           <img
-            src={user.image!}
+            src={user.image || null}
             className="w-10 h-10 rounded-full"
             alt="profile"
           />

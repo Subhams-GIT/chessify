@@ -5,12 +5,19 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import http from "http";
 import { INIT_GAME } from "./Game";
-
+import cluster from "cluster";
 dotenv.config();
 
 const PORT = 8080;
 const server = http.createServer();
-const wss = new WebSocketServer({ noServer: true });
+async function main(){
+  if(cluster.isPrimary){
+    cluster.fork();
+  }
+}
+
+export const wss = new WebSocketServer({ noServer: true });
+
 const gameManager = new GameManager();
 
 function authenticate(request: http.IncomingMessage) {
@@ -24,7 +31,7 @@ function authenticate(request: http.IncomingMessage) {
   const token = authHeader.split(" ")[1];
   if (!token) return new Error("not authenticated");
   try {
-    const user = jwt.verify(token, process.env.SECRET as string) as string;
+    const user = jwt.verify(token, process.env.SECRET!) as string;
     return user;
   } catch (err) {
     console.error(" Token verification failed:", err);
@@ -65,7 +72,7 @@ wss.on("connection", (ws, request) => {
     gameManager.removeUser(ws);
   });
 });
-
+main();
 server.listen(PORT, () => {
   console.log(`WebSocket server listening on port ${PORT}`);
 });

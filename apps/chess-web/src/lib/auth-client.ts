@@ -1,7 +1,9 @@
 import { createAvatar } from "@dicebear/core";
 import { betterAuth } from "better-auth";
 import { lorelei } from "@dicebear/collection";
-import signup from "./signup";
+import prisma from "@repo/database";
+import type { User } from "better-auth";
+import { customSession } from "better-auth/plugins";
 const auth = betterAuth({
   socialProviders: {
     google: {
@@ -15,9 +17,18 @@ const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        before: async (user) => {
-          user.image = generateAvatar();
-          await signup(user);
+        after: async (user: User) => {
+          await prisma.user.upsert({
+            where: { id: user.id },
+            update: {}, 
+            create: {
+              id: user.id,
+              emailVerified: user.emailVerified,
+              name: user.name,
+              username: (user.name?.split(" ")[0] ?? "user") + Math.floor(Math.random() * 1000),
+              image: createAvatar(lorelei).toDataUri(),
+            },
+          });
         },
       },
     },
@@ -31,11 +42,24 @@ const auth = betterAuth({
   },
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTERAUTH_URL!,
+  plugins:[
+    customSession(async ({user,session})=>{
+      const dbuser=await prisma.user.findFirst({where:{id:user.id}})
+      return {
+        user:{
+          ...user,
+          username:dbuser?.username
+        },
+        session:{
+          ...session,
+          username:dbuser?.username
+        }
+      }
+    })
+  ]
 });
 
-function generateAvatar() {
-  const avatar = createAvatar(lorelei).toString();
-  return avatar;
-}
+
+
 export type Session = typeof auth.$Infer.Session;
 export default auth;

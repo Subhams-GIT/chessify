@@ -1,6 +1,7 @@
 "use client";
 
 import Sidebar from "@/Components/Sidebar";
+import Tab from "@/Components/Tab";
 import TopBar from "@/Components/TopBar";
 import { authClient } from "@/lib/auth";
 import { useUser } from "@/Store/store";
@@ -39,12 +40,15 @@ export default function Page() {
   }
 
   return (
-    <div className="w-screen h-screen max-w-full max-h-full bg-zinc-100 grid grid-cols-[200px_3fr]">
+    <div className="w-screen h-screen max-w-full max-h-full bg-zinc-100 grid grid-cols-[250px_3fr]">
       <div className="h-full flex flex-col">
         <Sidebar />
       </div>
       <div className="h-full w-full flex flex-col px-3">
         <TopBar />
+      <div>
+        <Tab/>
+      </div>
       </div>
     </div>
   );

@@ -60,18 +60,18 @@ const Sidebar = React.memo(function SideBar() {
 
   return (
     <motion.div
-      initial={{ width: 150 }}
-      className={`h-[96%] ml-2 mt-2  flex flex-col gap-y-10 border-0 bg-white shadow-xl rounded-2xl p-2`}
+      initial={{ width: 200 }}
+      className={`h-[96%] m-auto flex flex-col gap-y-10 border-0 bg-white shadow-xl rounded-2xl p-2`}
     >
-      <div className="flex justify-center items-center gap-2">
-        <section className="bg-[#09C388] rounded-xl p-1  shadow-2xl">
+      <div className="flex justify-center items-center gap-2 px-auto">
+        <section className="bg-[#09C388] rounded-xl p-1  shadow-2xl mt-auto">
           <Gamepad className="text-white "/>
         </section>
         <div className="font-bold font-sans">ChessTrack</div>
       </div>
 
       <div className="flex flex-col gap-5">
-        <Button styles="bg-[#09C388] shadow-xl text-white rounded-xl flex justify-center items-center  py-5 px-2 flex-wrap"
+        <Button styles="bg-[#09C388] shadow-xl text-white rounded-xl flex justify-center items-center  py-5 px-2 flex-wrap m-auto"
             callback={createGame}
         >
           <PlusCircle/> Create Game
