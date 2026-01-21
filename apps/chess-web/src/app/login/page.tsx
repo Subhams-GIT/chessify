@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { authClient } from "@/lib/auth";
+import { authClient } from "@repo/auth/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// import prisma from "@repo/database";
 import { SuccessContext } from "better-auth/react";
-import signup from "@/lib/signup";
-import prisma from "@repo/database";
+
 
 export default function Page() {
   const [loading, setLoading] = useState(false);

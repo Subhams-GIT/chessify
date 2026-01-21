@@ -1,78 +1,57 @@
-import { WebSocketServer } from "ws";
+
+import WebSocket, { WebSocketServer } from "ws";
+import { auth } from "./lib/auth";
 import { GameManager } from "./GameManager";
 import { User } from "./User";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import http from "http";
-import { INIT_GAME } from "./Game";
-import cluster from "cluster";
-dotenv.config();
+import { fromNodeHeaders} from "better-auth/node";
 
-const PORT = 8080;
-const server = http.createServer();
-async function main(){
-  if(cluster.isPrimary){
-    cluster.fork();
-  }
-}
-
-export const wss = new WebSocketServer({ noServer: true });
-
+export const wss = new WebSocketServer({ port: 8000 });
 const gameManager = new GameManager();
 
-function authenticate(request: http.IncomingMessage) {
-  const authHeader = request.headers["authorization"];
+wss.on('listening', () => {
+  console.log('listening')
+})
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    console.error(" No or invalid Authorization header");
-    return null;
+wss.on('error', (e) => {
+  console.log(e);
+  process.exit(1);
+})
+
+wss.on("connection", async (ws: WebSocket, req) => {
+  const rawCookie = req.headers.cookie;
+
+  if (!rawCookie) {
+    ws.close(1008, "No cookies");
+    return;
   }
-
-  const token = authHeader.split(" ")[1];
-  if (!token) return new Error("not authenticated");
+  console.log({ rawCookie })
   try {
-    const user = jwt.verify(token, process.env.SECRET!) as string;
-    return user;
-  } catch (err) {
-    console.error(" Token verification failed:", err);
-    return null;
-  }
-}
+    const session = await auth.api.getSession({
+         headers: fromNodeHeaders(req.headers),
+    });
+    console.log(session)
+    if (!session || !session.user) {
+      ws.close(1008, "Unauthorized");
+      return;
+    }
 
-server.on("upgrade", (request, socket, head) => {
-  const authedUser = authenticate(request);
+    const { user } = session;
+    console.log("Authenticated user:", user);
 
-  if (!authedUser || authedUser instanceof Error) {
-    socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
-    socket.destroy();
+    const appUser = {
+      ...user,
+      displayName: user.name,
+      username: user.name || user.email
+    };
+    gameManager.addUser(new User(ws, appUser));
+
+    ws.on('close', () => {
+      gameManager.removeUser(ws);
+    });
+  } catch (e) {
+    console.error("Auth error:", e);
+    ws.close(1008, "Internal Server Error");
     return;
   }
 
-  request.user = JSON.parse(authedUser);
-  wss.handleUpgrade(request, socket, head, (ws) => {
-    // attach authenticated user to the connection
-    (ws as any).user = authedUser;
-    wss.emit("connection", ws, request);
-  });
-});
-
-wss.on("connection", (ws, request) => {
-  if (!request.user) return new Error("no user !");
-  ws.onmessage = (message) => {
-      const {type,data}=JSON.parse(JSON.stringify(message))
-      switch (type){
-        case INIT_GAME:
-          const user = new User(ws, request.user!);
-          gameManager.addUser(user);
-        break;
-      }
-  };
-
-  ws.on("close", () => {
-    gameManager.removeUser(ws);
-  });
-});
-main();
-server.listen(PORT, () => {
-  console.log(`WebSocket server listening on port ${PORT}`);
 });

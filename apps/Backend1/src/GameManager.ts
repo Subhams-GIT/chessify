@@ -1,24 +1,33 @@
 import { WebSocket } from "ws";
 import { Game, INIT_GAME, MOVE } from "./Game";
 import { User } from "./User";
+import { createClient, RedisClientType } from "redis";
+
+const connection = {
+  url: ""
+}
 
 export class GameManager {
   private games: Game[];
-  private pendingPlayerIds: string[];
+  private pendingPlayerIds: WebSocket|null;
   private users: User[];
-  static manager:GameManager;
+  public redisClient: RedisClientType;
+  static manager: GameManager;
+
   constructor() {
     this.games = [];
-    this.pendingPlayerIds = [];
+    this.pendingPlayerIds = null;
     this.users = [];
+    this.redisClient = createClient(connection) 
   }
 
-  getInstance(){
-    if(GameManager.manager){
+  getInstance() {
+    if (GameManager.manager) {
       return GameManager.manager
     }
     else return new GameManager;
-  } 
+  }
+
   addUser(user: User) {
     this.users.push(user);
     this.handleMessage(user);
@@ -28,37 +37,32 @@ export class GameManager {
     user.socket.addEventListener("message", (messsage) => {
       const data = JSON.parse(messsage.toString());
       if (data.type === INIT_GAME) {
-        if (this.pendingPlayerIds.length>0) {
-         const userid=this.pendingPlayerIds.shift();
-         const game=this.games.find(g=>g.player1Id===userid)
-         if(game) {
-          game.player2Id=data.userid
-         }
+        if (this.pendingPlayerIds) {
+         const game=new Game(this.pendingPlayerIds,user.socket);
+         this.games.push(game)
+         this.pendingPlayerIds=null;
         } else {
-          const game = new Game(user.id, null);
-          this.games.push(game);
-          this.users.push(user);
-          this.pendingPlayerIds.push(game.player1Id)
+         this.pendingPlayerIds=user.socket;
         }
       }
 
       if (data.type === MOVE) {
         const game = this.games.find(
-          (game) => game.player1Id === user.id || game.player2Id === user.id
+          (game) => game.player1 === user.socket || game.player2 === user.socket
         );
         if (game) {
-          game.makeMove(user, data.move);
+          game.makeMove(user,data.move)
         }
       }
     });
   }
 
-  removeUser(ws:WebSocket){
-    const user=this.users.find(user=>user.socket===ws)
-    if(!user){
+  removeUser(ws: WebSocket) {
+    const user = this.users.find(user => user.socket === ws)
+    if (!user) {
       throw new Error('user not found')
     }
 
-    this.users.splice(Number.parseInt(user.id),1)
+    this.users.splice(Number.parseInt(user.id), 1)
   }
 }

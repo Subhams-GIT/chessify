@@ -1,9 +1,9 @@
 import React from "react"
 
-const Button = (props:{children:React.ReactNode,callback:(data:string|undefined)=>void,styles:string}) => {
+const Button = (props:{children:React.ReactNode,callback:(data:string|null)=>void,styles:string}) => {
   return (
     <div>
-        <button onClick={()=>props.callback} className={props.styles}>{props.children}</button>
+        <button onClick={()=>props.callback(null)} className={props.styles}>{props.children}</button>
     </div>
   )
 }
