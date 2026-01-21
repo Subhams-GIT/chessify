@@ -154,7 +154,7 @@ const config = {
   },
   "relativeEnvPaths": {
     "rootEnvPath": null,
-    "schemaEnvPath": "../../../../apps/Backend1/.env"
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.19.1",
@@ -174,13 +174,20 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider   = \"prisma-client-js\"\n  engineType = \"binary\"\n  output     = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id             String  @id @default(cuid()) @map(\"_id\")\n  username       String  @unique\n  email          String? @unique\n  name           String?\n  image          String?\n  emailVerified  Boolean\n  moves          Move[]\n  gamesAsPlayer1 Game[]  @relation(\"Player1Games\")\n  gamesAsPlayer2 Game[]  @relation(\"Player2Games\")\n}\n\nmodel Game {\n  id        String @id @default(cuid()) @map(\"_id\")\n  player1Id String @db.ObjectId\n  player2Id String @db.ObjectId\n  player1   User   @relation(\"Player1Games\", fields: [player1Id], references: [id])\n  player2   User   @relation(\"Player2Games\", fields: [player2Id], references: [id])\n  moves     Move[]\n}\n\nmodel Move {\n  id       String @id @default(cuid()) @map(\"_id\")\n  gameId   String @db.ObjectId\n  game     Game   @relation(fields: [gameId], references: [id])\n  playerId String @db.ObjectId\n  player   User   @relation(fields: [playerId], references: [id])\n  moveData String\n}\n",
   "inlineSchemaHash": "2d2b7899133680ab2ea47e2928a75bd2a5e81abc024bbf9aa67ead9074475134",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"MoveToUser\"},{\"name\":\"gamesAsPlayer1\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player1Games\"},{\"name\":\"gamesAsPlayer2\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"Player2Games\"}],\"dbName\":null},\"Game\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"player1Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player2Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player1\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player1Games\"},{\"name\":\"player2\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"Player2Games\"},{\"name\":\"moves\",\"kind\":\"object\",\"type\":\"Move\",\"relationName\":\"GameToMove\"}],\"dbName\":null},\"Move\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"gameId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"game\",\"kind\":\"object\",\"type\":\"Game\",\"relationName\":\"GameToMove\"},{\"name\":\"playerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"player\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MoveToUser\"},{\"name\":\"moveData\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = undefined
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
+  }
+}
 config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({

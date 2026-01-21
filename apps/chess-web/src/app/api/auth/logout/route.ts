@@ -1,5 +1,6 @@
 import { ProjectError } from "@/Components/messages/Error";
-import { authClient } from "@repo/auth/auth-client";
+import { authClient } from "@/lib/auth";
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

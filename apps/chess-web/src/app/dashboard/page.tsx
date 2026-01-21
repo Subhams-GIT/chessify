@@ -3,7 +3,7 @@
 import Sidebar from "@/Components/Sidebar";
 import Tab from "@/Components/Tab";
 import TopBar from "@/Components/TopBar";
-import { authClient } from "@repo/auth/auth-client";
+import { authClient } from "@/lib/auth";
 import { useUser } from "@/Store/store";
 import { LoaderPinwheelIcon } from "lucide-react";
 import { useEffect, useState } from "react";

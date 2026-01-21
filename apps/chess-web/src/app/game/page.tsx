@@ -5,10 +5,10 @@ import { DesktopLayout, } from "@/Components/Desktop";
 import { TabletLayout } from "@/Components/Tablet";
 import { MobileLayout } from "@/Components/Mobile";
 
-const Page = () => {
+const page = () => {
   const windowWidth=useWindow();
   if(windowWidth<=1024) return <MobileLayout/>
   else return <DesktopLayout/>
 };
 
-export default Page;
+export default page;

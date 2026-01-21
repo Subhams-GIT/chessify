@@ -1,5 +1,5 @@
 import Image from "next/image";
-import auth from "@repo/auth/auth";
+import auth from "@/lib/auth-client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -8,8 +8,8 @@ export default async function Home() {
   const session=await auth.api.getSession({
     headers:rawheaders
   });
-
-
+  // const user=session?.user;
+  console.log(session)
   if(session && session.user){
     redirect('/dashboard')
   }

@@ -4,7 +4,6 @@ import { lorelei } from "@dicebear/collection";
 import prisma from "@repo/database";
 import type { User } from "better-auth";
 import { customSession } from "better-auth/plugins";
-import { prismaAdapter } from "better-auth/adapters/prisma";
 const auth = betterAuth({
   socialProviders: {
     google: {
@@ -15,19 +14,14 @@ const auth = betterAuth({
   advanced: {
     useSecureCookies: true,
   },
-  database: prismaAdapter(prisma, {
-    provider: "mongodb"
-  }),
   databaseHooks: {
     user: {
       create: {
         after: async (user: User) => {
-
           await prisma.user.upsert({
-            where: { email: user.email },
-            update: {},
+            where: { id: user.id },
+            update: {}, 
             create: {
-              email: user.email,
               id: user.id,
               emailVerified: user.emailVerified,
               name: user.name,
@@ -48,22 +42,24 @@ const auth = betterAuth({
   },
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTERAUTH_URL!,
-  plugins: [
-    customSession(async ({ user, session }) => {
-      const dbuser = await prisma.user.findFirst({ where: { id: user.id } })
+  plugins:[
+    customSession(async ({user,session})=>{
+      const dbuser=await prisma.user.findFirst({where:{id:user.id}})
       return {
-        user: {
+        user:{
           ...user,
-          username: dbuser?.username
+          username:dbuser?.username
         },
-        session: {
+        session:{
           ...session,
-          username: dbuser?.username
+          username:dbuser?.username
         }
       }
     })
   ]
 });
+
+
 
 export type Session = typeof auth.$Infer.Session;
 export default auth;

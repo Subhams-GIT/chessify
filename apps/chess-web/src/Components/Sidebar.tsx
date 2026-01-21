@@ -26,8 +26,7 @@ const Sidebar = React.memo(function SideBar() {
     currentTab.current = tab;
     router.replace(`/${route}`);
   };
-  console.log(socket)
-  // console.log(currentTab.current);
+  console.log(currentTab.current);
   console.log(selectedTab);
   const tabs = [
     { id: "History",
@@ -48,19 +47,16 @@ const Sidebar = React.memo(function SideBar() {
       route: "friends",
     },
   ];
-  
   useEffect(() => {
     const tab = currentTab.current;
-    if (tab != null) setSelectedTab(tab);
-    
+    if (tab != null) {
+      setSelectedTab(tab);
+    }
   }, []);
 
   const createGame=useCallback(()=>{
-    console.log("callback");
-    socket.isConnected=true;
-    console.log(socket?.sendMessage)
     socket?.sendMessage(JSON.stringify({type:"INIT_GAME"}))
-  },[socket])
+  },[])
 
   return (
     <motion.div

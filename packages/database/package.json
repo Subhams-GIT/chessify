@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": "true",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "db:generate": "prisma generate --schema=./prisma/schema.prisma",
@@ -12,7 +13,7 @@
   "exports": {
     ".": {
       "node": "./src/index.ts",
-      "default": "./dist/index.js"
+      "default": "./src/index.ts"
     }
   },
   "keywords": [],

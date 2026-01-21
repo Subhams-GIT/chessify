@@ -154,7 +154,7 @@ const config = {
   },
   "relativeEnvPaths": {
     "rootEnvPath": null,
-    "schemaEnvPath": "../../../../apps/Backend1/.env"
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.19.1",
@@ -174,7 +174,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider   = \"prisma-client-js\"\n  engineType = \"binary\"\n  output     = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id             String  @id @default(cuid()) @map(\"_id\")\n  username       String  @unique\n  email          String? @unique\n  name           String?\n  image          String?\n  emailVerified  Boolean\n  moves          Move[]\n  gamesAsPlayer1 Game[]  @relation(\"Player1Games\")\n  gamesAsPlayer2 Game[]  @relation(\"Player2Games\")\n}\n\nmodel Game {\n  id        String @id @default(cuid()) @map(\"_id\")\n  player1Id String @db.ObjectId\n  player2Id String @db.ObjectId\n  player1   User   @relation(\"Player1Games\", fields: [player1Id], references: [id])\n  player2   User   @relation(\"Player2Games\", fields: [player2Id], references: [id])\n  moves     Move[]\n}\n\nmodel Move {\n  id       String @id @default(cuid()) @map(\"_id\")\n  gameId   String @db.ObjectId\n  game     Game   @relation(fields: [gameId], references: [id])\n  playerId String @db.ObjectId\n  player   User   @relation(fields: [playerId], references: [id])\n  moveData String\n}\n",
   "inlineSchemaHash": "2d2b7899133680ab2ea47e2928a75bd2a5e81abc024bbf9aa67ead9074475134",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 
