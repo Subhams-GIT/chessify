@@ -1,1 +1,1 @@
-{"root":["./request.d.ts","./src/Game.ts","./src/GameManager.ts","./src/User.ts","./src/index.ts"],"version":"5.9.3"}
+{"root":["./request.d.ts","./src/Game.ts","./src/GameManager.ts","./src/User.ts","./src/global.d.ts","./src/index.ts","./src/redis.ts","./src/webconnect.ts","./src/lib/auth.ts"],"version":"5.9.3"}

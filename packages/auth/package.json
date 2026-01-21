@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "@dicebear/collection": "^9.3.1",
+    "@dicebear/core": "^9.3.1",
+    "better-auth": "^1.4.17",
+    "typescript": "^5.9.3"
+  },
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type":"module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports":{
+    "./auth":"./src/auth.ts",
+    "./auth-client":"./src/auth-client.ts"
+  },
+  "devDependencies": {
+    "@repo/database": "*",
+    "@types/node": "^24.10.4"
+  }
+}

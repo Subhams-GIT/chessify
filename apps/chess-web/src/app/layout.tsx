@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import auth from "@/lib/auth-client";
+import auth from "@repo/auth/auth";
 import { headers } from "next/headers";
+import { WsContextProvider } from "@/context/wscontext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default async function RootLayout({
   
   console.log(data)
   return (
+    
     <html lang="en" precedence="default">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,9 +49,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <WsContextProvider>
         {/* <AuthProvider></AuthProvider> */}
         {children}
+      </WsContextProvider>
       </body>
+      
     </html>
   );
 }
